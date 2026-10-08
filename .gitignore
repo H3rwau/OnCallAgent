@@ -12,7 +12,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
+.xcodemap
+.mvn
 ### IntelliJ IDEA ###
 .idea
 *.iws
