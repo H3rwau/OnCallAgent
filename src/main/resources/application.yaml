@@ -1,3 +1,11 @@
 spring:
   application:
     name: OnCallAgent
+
+
+
+# 文档分片配置
+document:
+  chunk:
+    max-size: 800  # 每个分片最大字符数
+    overlap: 100   # 分片之间的重叠字符数
