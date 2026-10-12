@@ -28,6 +28,8 @@
 
 		<!-- 依赖包版本 -->
 		<lombok.version>1.18.38</lombok.version>
+		<dashscope.version>2.17.0</dashscope.version>
+		<milvus.version>2.6.10</milvus.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,10 +39,35 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
+		<!-- 阿里云 DashScope SDK (文本向量化) -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dashscope-sdk-java</artifactId>
+			<version>${dashscope.version}</version>
+			<exclusions>
+				<!-- 排除 slf4j-simple，使用 Spring Boot 默认的 Logback -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.milvus</groupId>
+			<artifactId>milvus-sdk-java</artifactId>
+			<version>${milvus.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>

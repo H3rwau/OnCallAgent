@@ -1,11 +1,66 @@
+server:
+  port: 9900
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# Spring AI Alibaba DashScope 配置
 spring:
   application:
     name: OnCallAgent
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY}  # 从环境变量读取
+      chat:
+        options:
+          timeout: 180000  # 超时时间180秒（3分钟）
+      retry:
+        max-attempts: 3  # 最大重试次数
+        backoff:
+          initial-interval: 2000  # 初始重试间隔2秒
+          multiplier: 2  # 重试间隔倍数
+          max-interval: 10000  # 最大重试间隔10秒
 
-
+    # Spring AI MCP 客户端配置
+    # 如果使用mock数据，请注释这部分内容
+    mcp:
+      client:
+        enabled: true
+        name: tencent-mcp-server
+        version: 1.0.0
+        request-timeout: 60s
+        type: ASYNC
+        sse:
+          connections:
+            tencent-cls:
+              url: https://mcp-api.tencent-cloud.com
+              sse-endpoint: /sse/92XXXXXXXXb4  # 完整的SSE端点路径
 
 # 文档分片配置
 document:
   chunk:
     max-size: 800  # 每个分片最大字符数
     overlap: 100   # 分片之间的重叠字符数
+
+# DashScope Embedding 配置
+dashscope:
+  api:
+    key: ${DASHSCOPE_API_KEY}  # 从环境变量读取
+  embedding:
+    model: text-embedding-v4  # 阿里云文本嵌入模型
+
+# 文件上传路径配置
+file:
+  upload:
+    path: ${FILE_UPLOAD_PATH:./uploads}  # 默认为项目根目录下的 uploads 文件夹
+
+# Milvus 向量数据库配置
+milvus:
+  host: localhost
+  port: 19530
+  username: ""
+  password: ""
+  database: default
+  timeout: 10000
