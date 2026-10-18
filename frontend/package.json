@@ -1,0 +1,29 @@
+{
+  "name": "oncall-agent-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "dompurify": "^3.3.1",
+    "lucide-vue-next": "^0.468.0",
+    "marked": "^17.0.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.0",
+    "vite": "^7.3.0",
+    "vue-tsc": "^3.2.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
