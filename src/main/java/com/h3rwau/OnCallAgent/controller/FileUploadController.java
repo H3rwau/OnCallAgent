@@ -75,8 +75,10 @@ public class FileUploadController {
                 logger.info("向量索引创建成功: {}", filePath);
             } catch (Exception e) {
                 logger.error("向量索引创建失败: {}, 错误: {}", filePath, e.getMessage(), e);
-                // 注意：即使索引失败，文件上传仍然成功，只是记录错误日志
-                // 可以根据业务需求决定是否要删除文件或返回错误
+                ApiResponse<String> errorResponse = new ApiResponse<>();
+                errorResponse.setCode(500);
+                errorResponse.setMessage("文件已保存，但向量索引失败，请检查后端日志后重新上传。");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
             }
 
             FileUploadRes response = new FileUploadRes(

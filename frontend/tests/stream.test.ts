@@ -76,5 +76,6 @@ test('AI Ops POST has no invented request body and uses SSE', async () => {
 
 test('rejects non-SSE and failed HTTP responses', async () => {
   await assert.rejects(requestAiOps(() => {}, { fetcher: (async () => new Response('{}', { headers: { 'Content-Type': 'application/json' } })) as typeof fetch }), /没有返回 SSE/)
+  await assert.rejects(requestAiOps(() => {}, { fetcher: (async () => new Response('', { status: 500 })) as typeof fetch }), /内部错误/)
   await assert.rejects(requestAiOps(() => {}, { fetcher: (async () => new Response('', { status: 502 })) as typeof fetch }), /HTTP 502/)
 })

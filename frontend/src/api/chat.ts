@@ -33,7 +33,10 @@ export async function requestChat(
       signal: controller.signal,
     })
     if (!response.ok) {
-      if (response.status === 500 || response.status === 502 || response.status === 503 || response.status === 504) {
+      if (response.status === 500) {
+        throw new Error('助手服务发生内部错误（HTTP 500），请查看后端日志后重试。')
+      }
+      if (response.status === 502 || response.status === 503 || response.status === 504) {
         throw new Error('暂时连接不到助手服务，请确认后端已启动，或稍后重试。')
       }
       throw new Error(`请求失败（HTTP ${response.status}），请稍后重试。`)

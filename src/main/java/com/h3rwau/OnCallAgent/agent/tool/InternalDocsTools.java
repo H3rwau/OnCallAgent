@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.h3rwau.OnCallAgent.service.VectorSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class InternalDocsTools {
 
     /** 工具名常量，用于动态构建提示词 */
     public static final String TOOL_QUERY_INTERNAL_DOCS = "queryInternalDocs";
+    public static final String ORIGINAL_QUESTION_CONTEXT = "oncall.originalQuestion";
 
     private final VectorSearchService vectorSearchService;
 
@@ -46,19 +48,21 @@ public class InternalDocsTools {
      * @param query 搜索查询，描述您要查找的信息
      * @return JSON 格式的搜索结果，包含相关文档内容、相似度分数和元数据
      */
-    @Tool(description = "Use this tool to search internal documentation and knowledge base for relevant information. " +
-            "It performs RAG (Retrieval-Augmented Generation) to find similar documents and extract processing steps. " +
-            "This is useful when you need to understand internal procedures, best practices, or step-by-step guides " +
-            "stored in the company's documentation.")
+    @Tool(description = "Search the current internal knowledge base for system-specific facts, error-code definitions, " +
+            "procedures and technical guides. Preserve exact class/field names and numeric error codes in the query. " +
+            "The knowledge base can change after a conversation starts; search again instead of relying on past " +
+            "claims that documents are missing or unavailable. A no-results response is not a service outage.")
     public String queryInternalDocs(
             @ToolParam(description = "Search query describing what information you are looking for")
-            String query) {
-
+            String query, ToolContext toolContext) {
 
         try {
-            // 使用向量搜索服务检索相关文档
+            Object original = toolContext == null ? null : toolContext.getContext().get(ORIGINAL_QUESTION_CONTEXT);
+            String retrievalQuery = original instanceof String question && !question.isBlank()
+                    ? question + "\n检索补充：" + query : query;
+            // Keep the actual user's identifiers even when the model broadens its tool query.
             List<VectorSearchService.SearchResult> searchResults =
-                    vectorSearchService.searchSimilarDocuments(query, topK);
+                    vectorSearchService.searchSimilarDocuments(retrievalQuery, topK);
 
             if (searchResults.isEmpty()) {
                 return "{\"status\": \"no_results\", \"message\": \"No relevant documents found in the knowledge base.\"}";

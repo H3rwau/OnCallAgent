@@ -1,0 +1,26 @@
+# 供官方 aliyun/alibabacloud-observability-mcp-server 使用。
+# 由 python3 scripts/aliyun_sls_mcp.py 独立启动，提供 http://127.0.0.1:8181/sse。
+# 监听地址/端口在此配置；Java 侧的 url 和 sse-endpoint 配置需与此对应。
+# 凭证通过该进程的 ALIBABA_CLOUD_ACCESS_KEY_ID / ALIBABA_CLOUD_ACCESS_KEY_SECRET 注入。
+server:
+  transport: sse
+  host: "127.0.0.1"
+  port: 8181
+
+logging:
+  level: info
+  debug_mode: false
+
+toolkit:
+  scope: iaas
+  enabled_tools:
+    - sls_list_projects
+    - sls_list_logstores
+    - sls_execute_sql
+
+locale:
+  timezone: Asia/Shanghai
+  language: zh-CN
+
+runtime:
+  region: cn-beijing

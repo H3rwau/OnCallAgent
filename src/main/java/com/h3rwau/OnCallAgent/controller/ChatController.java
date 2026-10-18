@@ -2,7 +2,6 @@ package com.h3rwau.OnCallAgent.controller;
 
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import com.alibaba.cloud.ai.graph.NodeOutput;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
@@ -14,8 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +42,6 @@ public class ChatController {
 
     @Autowired
     private ChatService chatService;
-
-    @Autowired
-    private ToolCallbackProvider tools;
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -92,7 +86,7 @@ public class ChatController {
             String systemPrompt = chatService.buildSystemPrompt(history);
 
             // 创建 ReactAgent
-            ReactAgent agent = chatService.createReactAgent(chatModel, systemPrompt);
+            ReactAgent agent = chatService.createReactAgent(chatModel, systemPrompt, request.getQuestion());
 
             // 执行对话
             String fullAnswer = chatService.executeChat(agent, request.getQuestion());
@@ -180,7 +174,7 @@ public class ChatController {
                 String systemPrompt = chatService.buildSystemPrompt(history);
 
                 // 创建 ReactAgent
-                ReactAgent agent = chatService.createReactAgent(chatModel, systemPrompt);
+                ReactAgent agent = chatService.createReactAgent(chatModel, systemPrompt, request.getQuestion());
 
                 // 用于累积完整答案
                 StringBuilder fullAnswerBuilder = new StringBuilder();
@@ -290,22 +284,12 @@ public class ChatController {
                 logger.info("收到 AI 智能运维请求 - 启动多 Agent 协作流程");
 
                 DashScopeApi dashScopeApi = chatService.createDashScopeApi();
-                DashScopeChatModel chatModel = DashScopeChatModel.builder()
-                        .dashScopeApi(dashScopeApi)
-                        .defaultOptions(DashScopeChatOptions.builder()
-                                .withModel(DashScopeChatModel.DEFAULT_MODEL_NAME)
-                                .withTemperature(0.3)
-                                .withMaxToken(8000)
-                                .withTopP(0.9)
-                                .build())
-                        .build();
-
-                ToolCallback[] toolCallbacks = tools.getToolCallbacks();
+                DashScopeChatModel chatModel = chatService.createAiOpsChatModel(dashScopeApi);
 
                 emitter.send(SseEmitter.event().name("message").data(SseMessage.content("正在读取告警并拆解任务...\n")));
 
-                // 调用 AiOpsService 执行分析流程
-                Optional<OverAllState> overAllStateOptional = aiOpsService.executeAiOpsAnalysis(chatModel, toolCallbacks);
+                // 调用 AiOpsService 执行分析流程，工具和资源信息由统一日志目录提供。
+                Optional<OverAllState> overAllStateOptional = aiOpsService.executeAiOpsAnalysis(chatModel);
 
                 if (overAllStateOptional.isEmpty()) {
                     emitter.send(SseEmitter.event().name("message")

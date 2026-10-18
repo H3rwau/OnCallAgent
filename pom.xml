@@ -71,6 +71,12 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Explicit transport for DashScope streaming read-idle timeouts (Boot-managed version). -->
+		<dependency>
+			<groupId>io.projectreactor.netty</groupId>
+			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -83,6 +89,11 @@
 			<artifactId>dashscope-sdk-java</artifactId>
 			<version>${dashscope.version}</version>
 			<exclusions>
+				<!-- Use Spring AI's generator version with its matching schema modules. -->
+				<exclusion>
+					<groupId>com.github.victools</groupId>
+					<artifactId>jsonschema-generator</artifactId>
+				</exclusion>
 				<!-- 排除 slf4j-simple，使用 Spring Boot 默认的 Logback -->
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -120,4 +131,15 @@
 			<url>https://maven.aliyun.com/repository/public</url>
 		</repository>
 	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.h3rwau.OnCallAgent.OnCallAgentApplication</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

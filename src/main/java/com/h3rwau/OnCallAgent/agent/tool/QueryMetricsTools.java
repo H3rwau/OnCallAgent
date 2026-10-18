@@ -122,7 +122,7 @@ public class QueryMetricsTools {
 
     /**
      * 构建 Mock 告警数据
-     * 与 aiops-docs 文档中的告警类型对应：
+     * 包含以下常见告警类型：
      * - HighCPUUsage: CPU使用率过高
      * - HighMemoryUsage: 内存使用率过高
      * - HighDiskUsage: 磁盘使用率过高

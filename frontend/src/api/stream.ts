@@ -85,6 +85,7 @@ export async function requestSse(
       body: body ? JSON.stringify(body) : undefined,
       signal: controller.signal,
     })
+    if (response.status === 500) throw new Error('助手服务发生内部错误（HTTP 500），请查看后端日志后重试。')
     if (!response.ok) throw new Error(`无法连接服务（HTTP ${response.status}），请确认后端已启动。`)
     if (!response.headers.get('content-type')?.includes('text/event-stream')) {
       throw new Error('服务没有返回 SSE 消息流，请检查接口和代理配置。')

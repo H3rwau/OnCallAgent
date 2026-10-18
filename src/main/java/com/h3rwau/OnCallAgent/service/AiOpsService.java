@@ -10,6 +10,7 @@ import com.h3rwau.OnCallAgent.agent.tool.DateTimeTools;
 import com.h3rwau.OnCallAgent.agent.tool.InternalDocsTools;
 import com.h3rwau.OnCallAgent.agent.tool.QueryLogsTools;
 import com.h3rwau.OnCallAgent.agent.tool.QueryMetricsTools;
+import com.h3rwau.OnCallAgent.logs.LogToolCatalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -41,16 +42,19 @@ public class AiOpsService {
     @Autowired(required = false)  // Mock 模式下才注册
     private QueryLogsTools queryLogsTools;
 
+    @Autowired
+    private LogToolCatalog logToolCatalog;
+
     /**
      * 执行 AI Ops 告警分析流程
      *
      * @param chatModel      大模型实例
-     * @param toolCallbacks  工具回调数组
      * @return 分析结果状态
      * @throws GraphRunnerException 如果 Agent 执行失败
      */
-    public Optional<OverAllState> executeAiOpsAnalysis(DashScopeChatModel chatModel, ToolCallback[] toolCallbacks) throws GraphRunnerException {
+    public Optional<OverAllState> executeAiOpsAnalysis(DashScopeChatModel chatModel) throws GraphRunnerException {
         logger.info("开始执行 AI Ops 多 Agent 协作流程");
+        ToolCallback[] toolCallbacks = logToolCatalog.toolCallbacks();
 
         // 构建 Planner 和 Executor Agent
         ReactAgent plannerAgent = buildPlannerAgent(chatModel, toolCallbacks);
@@ -61,7 +65,7 @@ public class AiOpsService {
                 .name("ai_ops_supervisor")
                 .description("负责调度 Planner 与 Executor 的多 Agent 控制器")
                 .model(chatModel)
-                .systemPrompt(buildSupervisorSystemPrompt())
+                .systemPrompt(buildSupervisorSystemPrompt() + "\n" + logToolCatalog.context())
                 .subAgents(List.of(plannerAgent, executorAgent))
                 .build();
 
@@ -103,7 +107,7 @@ public class AiOpsService {
                 .name("planner_agent")
                 .description("负责拆解告警、规划与再规划步骤")
                 .model(chatModel)
-                .systemPrompt(buildPlannerPrompt())
+                .systemPrompt(buildPlannerPrompt() + "\n" + logToolCatalog.context())
                 .methodTools(buildMethodToolsArray())
                 .tools(toolCallbacks)
                 .outputKey("planner_plan")
@@ -118,7 +122,7 @@ public class AiOpsService {
                 .name("executor_agent")
                 .description("负责执行 Planner 的首个步骤并及时反馈")
                 .model(chatModel)
-                .systemPrompt(buildExecutorPrompt())
+                .systemPrompt(buildExecutorPrompt() + "\n" + logToolCatalog.context())
                 .methodTools(buildMethodToolsArray())
                 .tools(toolCallbacks)
                 .outputKey("executor_feedback")
@@ -127,7 +131,7 @@ public class AiOpsService {
 
     /**
      * 动态构建方法工具数组
-     * 根据 cls.mock-enabled 决定是否包含 QueryLogsTools
+     * 根据 oncall.logs.mock-enabled 决定是否包含 QueryLogsTools
      */
     private Object[] buildMethodToolsArray() {
         if (queryLogsTools != null) {
@@ -148,7 +152,7 @@ public class AiOpsService {
                 1. 读取当前输入任务 {input} 以及 Executor 的最近反馈 {executor_feedback}。
                 2. 分析 Prometheus 告警、日志、内部文档等信息，制定可执行的下一步步骤。
                 3. 在执行阶段，输出 JSON，包含 decision (PLAN|EXECUTE|FINISH)、step 描述、预期要调用的工具、以及必要的上下文。
-                4. 调用任何腾讯云日志/主题相关工具时，region 参数必须使用连字符格式（如 ap-guangzhou），若不确定请省略以使用默认值。
+                4. 日志查询先根据日志源目录确定所属服务，使用该服务的实际工具定义和资源默认值，不混用其他服务的参数；缺少资源信息时先发现或反馈。
                 5. 严格禁止编造数据，只能引用工具返回的真实内容；如果连续 3 次调用同一工具仍失败或返回空结果，需停止该方向并在最终报告的结论部分说明"无法完成"的原因。
                 
                 ## 最终报告输出要求（CRITICAL）
@@ -242,7 +246,7 @@ public class AiOpsService {
     private String buildExecutorPrompt() {
         return """
                 你是 Executor Agent，负责读取 Planner 最新输出 {planner_plan}，只执行其中的第一步。
-                - 确认步骤所需的工具与参数，尤其是 region 参数要使用连字符格式（ap-guangzhou）；若 Planner 未给出则使用默认区域。
+                - 确认步骤所需的工具与参数。日志服务和资源来自日志源目录，参数名称、地域和时间单位按实际工具定义填写；信息不足时反馈缺失内容。未指定时间时优先查询最近一小时并限制返回条数。
                 - 调用相应的工具并收集结果，如工具返回错误或空数据，需要将失败原因、请求参数一并记录，并停止进一步调用该工具（同一工具失败达到 3 次时应直接返回 FAILED）。
                 - 将日志、指标、文档等证据整理成结构化摘要，标注对应的告警名称或资源，方便 Planner 填充"告警根因分析 / 处理方案执行"章节。
                 - 以 JSON 形式返回执行状态、证据以及给 Planner 的建议，写入 executor_feedback，严禁编造未实际查询到的内容。
@@ -269,7 +273,7 @@ public class AiOpsService {
                 3. 根据 executor_agent 的反馈，评估是否需要再次调用 planner_agent，直到 decision=FINISH。
                 4. FINISH 后，确保向最终用户输出完整的《告警分析报告》，格式必须严格为：
                    告警分析报告\n---\n# 告警处理详情\n## 活跃告警清单\n## 告警根因分析N\n## 处理方案执行N\n## 结论。
-                5. 若步骤涉及腾讯云日志/主题工具，请确保使用连字符区域 ID（ap-guangzhou 等），或省略 region 以采用默认值。
+                5. 日志查询必须使用日志源所属服务的实际可用工具，遵循日志源目录和工具定义，不混用不同服务的资源或参数。
                 6. 如果发现 Planner/Executor 在同一方向连续 3 次调用工具仍失败或没有数据，必须终止流程，直接输出"任务无法完成"的报告，明确告知失败原因，严禁凭空编造结果。
 
                 只允许在 planner_agent、executor_agent 与 FINISH 之间做出选择。

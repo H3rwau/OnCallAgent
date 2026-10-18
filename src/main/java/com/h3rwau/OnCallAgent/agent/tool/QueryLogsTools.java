@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -20,11 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 日志查询工具
- * 用于查询 CLS（云日志服务）的日志信息
- * 支持 Mock 模式，提供与告警关联的模拟日志数据
+ * 本地模拟日志工具，不访问任何真实云服务。
+ * 提供与告警关联的模拟日志数据。
  */
 @Component
+@ConditionalOnProperty(name = "oncall.logs.mock-enabled", havingValue = "true")
 public class QueryLogsTools {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryLogsTools.class);
@@ -35,7 +36,7 @@ public class QueryLogsTools {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${cls.mock-enabled:false}")
+    @Value("${oncall.logs.mock-enabled:false}")
     private boolean mockEnabled;
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter
@@ -118,10 +119,10 @@ public class QueryLogsTools {
             LogTopicsOutput output = new LogTopicsOutput();
             output.setSuccess(true);
             output.setTopics(topics);
-            output.setAvailableRegions(List.of("ap-guangzhou", "ap-shanghai", "ap-beijing", "ap-chengdu"));
-            output.setDefaultRegion("ap-guangzhou");
+            output.setAvailableRegions(List.of("mock-region"));
+            output.setDefaultRegion("mock-region");
 
-            output.setMessage(String.format("共有 %d 个可用的日志主题。建议使用默认地域 'ap-guangzhou' 或省略 region 参数", topics.size()));
+            output.setMessage(String.format("【模拟数据】共有 %d 个模拟日志主题，不代表真实云资源", topics.size()));
 
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(output);
 
@@ -135,35 +136,21 @@ public class QueryLogsTools {
      * 查询日志
      * 从云日志服务查询指定条件的日志
      *
-     * @param region 地域，如 ap-guangzhou
+     * @param region 模拟地域标识
      * @param logTopic 日志主题，如 system-metrics, application-logs
      * @param query 查询条件，如 level:ERROR OR cpu_usage:>80
      * @param limit 返回的日志条数，默认20条
      */
-    // 有效地域列表
-    private static final List<String> VALID_REGIONS = List.of(
-            "ap-guangzhou", "ap-shanghai", "ap-beijing", "ap-chengdu"
-    );
-
-    private static final String DEFAULT_REGION = "ap-guangzhou";
-
-    @Tool(description = "Query logs from Cloud Log Service (CLS). " +
-            "Use this tool to search application logs, system metrics, and other log data. " +
-            "IMPORTANT: Before calling this tool, you should call getAvailableLogTopics to understand what log topics are available. " +
-            "Available log topics: " +
-            "1) 'system-metrics' - System metrics logs (CPU, memory, disk usage, etc. Related to HighCPUUsage, HighMemoryUsage, HighDiskUsage alerts); " +
-            "2) 'application-logs' - Application logs (error logs, slow request logs, downstream dependency logs. Related to ServiceUnavailable, SlowResponse alerts); " +
-            "3) 'database-slow-query' - Database slow query logs (SQL queries with long execution time. Related to SlowResponse alerts); " +
-            "4) 'system-events' - System event logs (Pod restart, OOM Kill, container crash. Related to ServiceUnavailable, HighMemoryUsage alerts). " +
-            "logTopic (required, one of the above topics or their CLS topicId), " +
-            "query (optional, defaults to a curated search if empty), " +
-            "limit (optional, default 20, max 100).")
+    @Tool(description = "Query simulated logs for local testing only; never returns real cloud logs. " +
+            "Call getAvailableLogTopics first to discover the available mock topics. " +
+            "query is optional; limit defaults to 20 and is capped at 100.")
     public String queryLogs(
-            @ToolParam(description = "地域，可选值: ap-guangzhou, ap-shanghai, ap-beijing, ap-chengdu。默认 ap-guangzhou") String region,
-            @ToolParam(description = "日志主题，如 system-metrics, application-logs, database-slow-query, system-events，也支持 CLS TopicId") String logTopic,
+            @ToolParam(description = "模拟地域，可省略，默认 mock-region", required = false) String region,
+            @ToolParam(description = "模拟日志主题，如 system-metrics, application-logs, database-slow-query, system-events") String logTopic,
             @ToolParam(description = "查询条件，支持 Lucene 语法，如 level:ERROR OR cpu_usage:>80；为空时返回该主题近 5 条核心日志") String query,
             @ToolParam(description = "返回日志条数，默认20，最大100") Integer limit) {
 
+        region = region == null || region.isBlank() ? "mock-region" : region;
         int actualLimit = (limit == null || limit <= 0) ? 20 : Math.min(limit, 100);
 
         String safeQuery = query == null ? "" : query;
@@ -177,8 +164,7 @@ public class QueryLogsTools {
                 logEntries = buildMockLogs(region, logTopic, safeQuery, actualLimit);
                 logger.info("使用 Mock 数据，返回 {} 条日志", logEntries.size());
             } else {
-                // 真实模式：如果配置文件没有用mock，则按照spring-ai-starter-mcp-client-webflux的规范自动注入mcp tool。不会走进来
-                return buildErrorResponse("如果配置文件没有用mock，则按照spring-ai-starter-mcp-client-webflux的规范自动注入mcp tool,不会走进来");
+                return buildErrorResponse("当前未启用模拟日志模式");
             }
 
             // 构建成功响应
@@ -189,7 +175,7 @@ public class QueryLogsTools {
             output.setQuery(safeQuery.isBlank() ? "DEFAULT_QUERY" : safeQuery);
             output.setLogs(logEntries);
             output.setTotal(logEntries.size());
-            output.setMessage(logEntries.isEmpty() ? "未找到匹配的日志" : String.format("成功查询到 %d 条日志", logEntries.size()));
+            output.setMessage(logEntries.isEmpty() ? "【模拟数据】未找到匹配的日志" : String.format("【模拟数据】返回 %d 条模拟日志", logEntries.size()));
 
             String jsonResult = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(output);
             logger.info("日志查询完成: 找到 {} 条日志", logEntries.size());

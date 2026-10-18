@@ -15,7 +15,8 @@ spring:
       api-key: ${DASHSCOPE_API_KEY}  # 从环境变量读取
       chat:
         options:
-          timeout: 180000  # 超时时间180秒（3分钟）
+          model: ${DASHSCOPE_CHAT_MODEL:qwen-plus}  # 聊天和 AI Ops 共用的模型
+          timeout: ${DASHSCOPE_HTTP_TIMEOUT_MS:180000}  # 普通请求总超时、流式请求读空闲超时，单位毫秒
       retry:
         max-attempts: 3  # 最大重试次数
         backoff:
@@ -23,26 +24,24 @@ spring:
           multiplier: 2  # 重试间隔倍数
           max-interval: 10000  # 最大重试间隔10秒
 
-    # Spring AI MCP 客户端配置
-    # 如果使用mock数据，请注释这部分内容
+    # 启用的 SSE 连接来自下方 oncall.logs，由日志接入模块提供给 Spring AI 自动配置。
     mcp:
       client:
         enabled: true
-        name: tencent-mcp-server
+        name: oncall-agent
         version: 1.0.0
         request-timeout: 60s
-        type: ASYNC
-        sse:
-          connections:
-            tencent-cls:
-              url: https://mcp-api.tencent-cloud.com
-              sse-endpoint: /sse/92XXXXXXXXb4  # 完整的SSE端点路径
+        type: SYNC
 
 # 文档分片配置
 document:
   chunk:
     max-size: 800  # 每个分片最大字符数
     overlap: 100   # 分片之间的重叠字符数
+
+# 知识库检索返回的最大分片数；聊天由 Agent 按需检索。
+rag:
+  top-k: ${RAG_TOP_K:3}
 
 # DashScope Embedding 配置
 dashscope:
@@ -65,3 +64,66 @@ milvus:
   password: ""
   database: default
   timeout: 10000
+
+# Prometheus 告警查询配置。服务不可达时在查询时报告错误，不阻止应用创建工具 Bean。
+prometheus:
+  base-url: ${PROMETHEUS_BASE_URL:http://127.0.0.1:9090}
+  timeout: ${PROMETHEUS_TIMEOUT:10}
+  mock-enabled: ${PROMETHEUS_MOCK_ENABLED:false}
+
+# 多云日志接入：服务标识是配置键，可继续添加其他标准 SSE MCP 服务。
+oncall:
+  logs:
+    mock-enabled: ${LOGS_MOCK_ENABLED:false}
+    default-source: ${LOGS_DEFAULT_SOURCE:gb-orchestration}
+    servers:
+      aliyun-sls:
+        enabled: ${ALIYUN_SLS_MCP_ENABLED:true}
+        display-name: 阿里云 SLS
+        url: ${ALIYUN_SLS_MCP_URL:http://127.0.0.1:8181}
+        sse-endpoint: ${ALIYUN_SLS_MCP_SSE_ENDPOINT:/sse}
+        instructions: >-
+          使用 SLS 工具的实际定义。资源由 regionId、project、logStore 确定，
+          已知日志源时可直接使用原生 sls_execute_sql 工具，无需先列举所有项目。
+
+      tencent-cls:
+        enabled: ${TENCENT_CLS_MCP_ENABLED:false}
+        display-name: 腾讯云 CLS
+        url: ${TENCENT_CLS_MCP_URL:https://mcp-api.tencent-cloud.com}
+        sse-endpoint: ${TENCENT_CLS_MCP_SSE_ENDPOINT:}
+        instructions: >-
+          使用 CLS 工具的实际定义。地域与 TopicId 等参数必须来自用户、日志源目录或发现结果。
+
+      huawei-lts:
+        enabled: ${HUAWEI_LTS_MCP_ENABLED:false}
+        display-name: 华为云 LTS
+        url: ${HUAWEI_LTS_MCP_URL:}
+        sse-endpoint: ${HUAWEI_LTS_MCP_SSE_ENDPOINT:/sse}
+        instructions: >-
+          使用 LTS MCP 服务实际发现的工具；日志组、日志流、地域及时间单位按工具定义填写。
+
+    sources:
+      gb-orchestration:
+        server: aliyun-sls
+        name: GB端编排服务
+        aliases: [GB端编排日志, 编排服务日志]
+        defaults:
+          regionId: cn-beijing
+          project: aicorr-gb
+          logStore: aicorr-gb-thor-log
+      gb-corr:
+        server: aliyun-sls
+        name: GB端批改服务
+        aliases: [GB端批改日志, 批改服务日志]
+        defaults:
+          regionId: cn-beijing
+          project: aicorr-gb
+          logStore: aicorr-gb-corr-log
+      gb-engine:
+        server: aliyun-sls
+        name: GB端引擎服务
+        aliases: [GB端引擎日志, 引擎服务日志]
+        defaults:
+          regionId: cn-beijing
+          project: aicorr-gb
+          logStore: aicorr-gb-luke-biz-log

@@ -1,0 +1,666 @@
+{
+  "generatedAt": "2026-10-18T20:08:54",
+  "sourceCatalog": "docs/omr-issues/catalog.json",
+  "sourceUpdated": "2026-10-18",
+  "total": 60,
+  "cases": [
+    {
+      "id": "OMR-C01",
+      "title": "有内容的页面被当空白丢弃，整单仍正常",
+      "category": "校正与页码",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-C01.md",
+      "source": "docs/omr-issues/calibration.md#c01",
+      "catalogDocument": "calibration.md#c01",
+      "sha256": "4a606f34e3c6b91f52d4287d135795d85bcf50bd203f778904da3e547f0ba7ae"
+    },
+    {
+      "id": "OMR-C02",
+      "title": "数学月考背面定位窗口截断黑块，最终报页码异常",
+      "category": "校正与页码",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-C02.md",
+      "source": "docs/omr-issues/calibration.md#c02",
+      "catalogDocument": "calibration.md#c02",
+      "sha256": "3d00f7ed25361693d261a9509d1077e63bb2d7133b12cadb1456253d3150abae"
+    },
+    {
+      "id": "OMR-C03",
+      "title": "定位块缺失或残缺后的校正图严重变歪",
+      "category": "校正与页码",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-C03.md",
+      "source": "docs/omr-issues/calibration.md#c03",
+      "catalogDocument": "calibration.md#c03",
+      "sha256": "bff3322d5dbac4a33b4389f38bb309e03c38f5ea3853d91b2d58289c149aabec"
+    },
+    {
+      "id": "OMR-C04",
+      "title": "多模板重识别时人工定位框错位，线定位未实际调用",
+      "category": "校正与页码",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-C04.md",
+      "source": "docs/omr-issues/calibration.md#c04",
+      "catalogDocument": "calibration.md#c04",
+      "sha256": "a5a55b1990eace687d3b0fac151e4bc59b89f73b52e53de27b3d457de9351f96"
+    },
+    {
+      "id": "OMR-C05",
+      "title": "主观题题框偏移和切图截断，四角对齐仍不能恢复内部布局",
+      "category": "校正与页码",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-C05.md",
+      "source": "docs/omr-issues/calibration.md#c05",
+      "catalogDocument": "calibration.md#c05",
+      "sha256": "d175bb875530c200e6928459427b0d00eaf29f29a11ef549f6224b5e40e2827a"
+    },
+    {
+      "id": "OMR-C06",
+      "title": "首张校验页面显示题框偏移，服务端坐标却基本对齐",
+      "category": "校正与页码",
+      "evidenceState": "待补证据",
+      "file": "cases/OMR-C06.md",
+      "source": "docs/omr-issues/calibration.md#c06",
+      "catalogDocument": "calibration.md#c06",
+      "sha256": "eda18bc5d3c3dd86854c69cae646a19f582e0fb4888b54c850e7121b94ac872a"
+    },
+    {
+      "id": "OMR-O01",
+      "title": "局部定位补救越过整页上边界，整组客观题失败",
+      "category": "客观题识别",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-O01.md",
+      "source": "docs/omr-issues/objective.md#o01",
+      "catalogDocument": "objective.md#o01",
+      "sha256": "45bb835ab6fc7e6d7e995755dde6a41924a6427e7e533bd306539e5ec0fbb06a"
+    },
+    {
+      "id": "OMR-O02",
+      "title": "独立选项整图失败后回退到旧接口，选项坐标丢失",
+      "category": "客观题识别",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-O02.md",
+      "source": "docs/omr-issues/objective.md#o02",
+      "catalogDocument": "objective.md#o02",
+      "sha256": "b4980c69e89e50b1eaf21a7de00176727f58b2a12eaa5b2076d2993b5a596432"
+    },
+    {
+      "id": "OMR-O03",
+      "title": "手写字母题被混入独立填涂题分组，带坏整组结果",
+      "category": "客观题识别",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-O03.md",
+      "source": "docs/omr-issues/objective.md#o03",
+      "catalogDocument": "objective.md#o03",
+      "sha256": "790114c0e02c9284fb61ffa64b2cdbbfa815b6d587d9384856dd553ad6112fd0"
+    },
+    {
+      "id": "OMR-O04",
+      "title": "第 5 题多选漏 A/C，右列局部偏移被应用到整题",
+      "category": "客观题识别",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-O04.md",
+      "source": "docs/omr-issues/objective.md#o04",
+      "catalogDocument": "objective.md#o04",
+      "sha256": "2660cb940e7ca7aa992f1cdc3ed1b4c6b5ab9c2b4b1884421662df10c84e649a"
+    },
+    {
+      "id": "OMR-O05",
+      "title": "第 5/10 题题块截断 D，定位错列",
+      "category": "客观题识别",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-O05.md",
+      "source": "docs/omr-issues/objective.md#o05",
+      "catalogDocument": "objective.md#o05",
+      "sha256": "eac929c04965eac2cd4dd080d057fd8b5b6b7f64acfc4fff52e9a2394bc647b8"
+    },
+    {
+      "id": "OMR-O06",
+      "title": "第 13 题已涂 B，却匹配下一行题号并报未涂",
+      "category": "客观题识别",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-O06.md",
+      "source": "docs/omr-issues/objective.md#o06",
+      "catalogDocument": "objective.md#o06",
+      "sha256": "2f55aa670bae57043b74c3eaffb21bb08af036f4b261acadbcea6007afd3e7a0"
+    },
+    {
+      "id": "OMR-O07",
+      "title": "六选项多选题未填涂，却返回 BD",
+      "category": "客观题识别",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-O07.md",
+      "source": "docs/omr-issues/objective.md#o07",
+      "catalogDocument": "objective.md#o07",
+      "sha256": "070294e296ce8581627828975968da957384c490286cb7ad49901f35e099efaf"
+    },
+    {
+      "id": "OMR-O08",
+      "title": "第 4 题出现 CDEFH，需区分真实多涂与误检",
+      "category": "客观题识别",
+      "evidenceState": "待补证据",
+      "file": "cases/OMR-O08.md",
+      "source": "docs/omr-issues/objective.md#o08",
+      "catalogDocument": "objective.md#o08",
+      "sha256": "85f0b4feff0345433a02c9a4b8bb07c65d7a9388e4ade24854fbb08da89328fa"
+    },
+    {
+      "id": "OMR-O09",
+      "title": "单选题涂 A/D 后显示 +，被误认为漏识别",
+      "category": "客观题识别",
+      "evidenceState": "规则已确认，不能直接当作算法缺陷",
+      "file": "cases/OMR-O09.md",
+      "source": "docs/omr-issues/objective.md#o09",
+      "catalogDocument": "objective.md#o09",
+      "sha256": "0c1f4cc09d8209f1d7e8c66450e9982b3fb532bfea5ebc189402ab92b204fb74"
+    },
+    {
+      "id": "OMR-S01",
+      "title": "红笔划 1 分，却识别为 11 分且无异常",
+      "category": "主观评分与打分条",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-S01.md",
+      "source": "docs/omr-issues/scoring.md#s01",
+      "catalogDocument": "scoring.md#s01",
+      "sha256": "a3815ab40d4cf58eb04d3644c0345c82df90218dbf2625d971dca81c84c4f4c9"
+    },
+    {
+      "id": "OMR-S02",
+      "title": "短打分条 21.2 有笔迹却全零，21/22 共用明细存疑",
+      "category": "主观评分与打分条",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-S02.md",
+      "source": "docs/omr-issues/scoring.md#s02",
+      "catalogDocument": "scoring.md#s02",
+      "sha256": "df2d68415bbf6d944bf29749e815c2fe760781a637beeeeb85036435c4e3c395"
+    },
+    {
+      "id": "OMR-S03",
+      "title": "第 22 题划 10 分，却识别为 9 分",
+      "category": "主观评分与打分条",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-S03.md",
+      "source": "docs/omr-issues/scoring.md#s03",
+      "catalogDocument": "scoring.md#s03",
+      "sha256": "60060c69c7da422e923fb36639908496850b79274c8ef32cb732afe91c1eaf3e"
+    },
+    {
+      "id": "OMR-S04",
+      "title": "通用打分条返回 0，但红笔指标全零或 206",
+      "category": "主观评分与打分条",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-S04.md",
+      "source": "docs/omr-issues/scoring.md#s04",
+      "catalogDocument": "scoring.md#s04",
+      "sha256": "d2f7581ba0f40e2f7f4669b9b8ac82fb28e4d27fa5d45535eeb39855093a97c0"
+    },
+    {
+      "id": "OMR-S05",
+      "title": "未见明显红笔的 27/28 题，却正常给出 13/20 分",
+      "category": "主观评分与打分条",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-S05.md",
+      "source": "docs/omr-issues/scoring.md#s05",
+      "catalogDocument": "scoring.md#s05",
+      "sha256": "a795424539224e74ce9918f1f1a395ecc173796cb7cfeed566142a34654f512d"
+    },
+    {
+      "id": "OMR-S06",
+      "title": "打分条额外识别未划线的 0.5 分格",
+      "category": "主观评分与打分条",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-S06.md",
+      "source": "docs/omr-issues/scoring.md#s06",
+      "catalogDocument": "scoring.md#s06",
+      "sha256": "80377e294d70ebfddb0b8c695e414ad87c4bd05a805aed1d5b53662dfc927bca"
+    },
+    {
+      "id": "OMR-S07",
+      "title": "黑笔 TFBox 勾被红笔模式忽略，Java 给满分",
+      "category": "主观评分与打分条",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-S07.md",
+      "source": "docs/omr-issues/scoring.md#s07",
+      "catalogDocument": "scoring.md#s07",
+      "sha256": "50185c723c2bac43564304405ac609b8b18369b32ddbdfe82b9462da70741766"
+    },
+    {
+      "id": "OMR-S08",
+      "title": "手写 20/25 被读成一位数，模板两格与纸面单框不一致",
+      "category": "主观评分与打分条",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-S08.md",
+      "source": "docs/omr-issues/scoring.md#s08",
+      "catalogDocument": "scoring.md#s08",
+      "sha256": "855b8b2d176cf6b40644db076458ee06841603d793978d113ea06d99d6dbd733"
+    },
+    {
+      "id": "OMR-I01",
+      "title": "填涂考号每位少 1，裁剪边缘交点触发错误兜底",
+      "category": "考号与条码",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-I01.md",
+      "source": "docs/omr-issues/identity.md#i01",
+      "catalogDocument": "identity.md#i01",
+      "sha256": "2dc13d05eee79dec6f1291a2fcfbe4eb5e2a64d56ccf78367aee7164ed08c945"
+    },
+    {
+      "id": "OMR-I02",
+      "title": "考号区域相对模板整体下移约 30 像素，定位失败",
+      "category": "考号与条码",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-I02.md",
+      "source": "docs/omr-issues/identity.md#i02",
+      "catalogDocument": "identity.md#i02",
+      "sha256": "61ababe666e0587a376a316616159bbd18168e2a859b8f772e68e217a475b0a4"
+    },
+    {
+      "id": "OMR-I03",
+      "title": "Code 128 条码完整裁入，但起始黑条过细而解码失败",
+      "category": "考号与条码",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-I03.md",
+      "source": "docs/omr-issues/identity.md#i03",
+      "catalogDocument": "identity.md#i03",
+      "sha256": "aea386104387e02fd8b435625eb4d909b78f67c921e8afc97d08d81ac6227d80"
+    },
+    {
+      "id": "OMR-I04",
+      "title": "条码日志 errorCode=0，但没有有效 result",
+      "category": "考号与条码",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-I04.md",
+      "source": "docs/omr-issues/identity.md#i04",
+      "catalogDocument": "identity.md#i04",
+      "sha256": "b1806357713d6a1e75a9218dfb18716e389eaa1ac52dfb6c6665609b3b5860e6"
+    },
+    {
+      "id": "OMR-R01",
+      "title": "本地云端客观题入口空响应，图片相对路径与环境前缀不匹配",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R01.md",
+      "source": "docs/omr-issues/network-and-files.md#r01",
+      "catalogDocument": "runtime-and-contracts.md#r01",
+      "sha256": "da71d893464c402649feafeff0e9f07e2b157ae58f91f14cc32a0cc02a8a2bba"
+    },
+    {
+      "id": "OMR-R02",
+      "title": "图片元信息 HTTP 连接超时，被包装为 OTHER_ERROR",
+      "category": "接口、环境与入参",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-R02.md",
+      "source": "docs/omr-issues/network-and-files.md#r02",
+      "catalogDocument": "runtime-and-contracts.md#r02",
+      "sha256": "234af4f3199934e97c4f167bbbe05cc884c1113eaf55250f0d4f25a6654965ce"
+    },
+    {
+      "id": "OMR-R03",
+      "title": "文件服务 getOssConfig 初始化超时，被包装为 OTHER_ERROR",
+      "category": "接口、环境与入参",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-R03.md",
+      "source": "docs/omr-issues/network-and-files.md#r03",
+      "catalogDocument": "runtime-and-contracts.md#r03",
+      "sha256": "71625e18d69bc2b2cc375cdbc1d9ce15b0f75f22b69200239d6b6ec0820d2a5f"
+    },
+    {
+      "id": "OMR-R04",
+      "title": "校正图 OSS 上传失败，错误被覆盖成二维码异常",
+      "category": "接口、环境与入参",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-R04.md",
+      "source": "docs/omr-issues/network-and-files.md#r04",
+      "catalogDocument": "runtime-and-contracts.md#r04",
+      "sha256": "78adc3c7fdf5c8b994e60a82da3b8d4fac447fb13ee822ab61aab087efba397c"
+    },
+    {
+      "id": "OMR-R05",
+      "title": "缺 answerRoot 或题目标准答案记录，计分空指针",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R05.md",
+      "source": "docs/omr-issues/request-contracts.md#r05",
+      "catalogDocument": "runtime-and-contracts.md#r05",
+      "sha256": "554318d9b4f13459167238dd9bd5c04cb82475f1af859d1e45b1691f271a74c9"
+    },
+    {
+      "id": "OMR-R06",
+      "title": "双面两页模板只传一张扫描图，第二张取值越界",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R06.md",
+      "source": "docs/omr-issues/request-contracts.md#r06",
+      "catalogDocument": "runtime-and-contracts.md#r06",
+      "sha256": "e5ed5488bb7ac62c748ab948bf0049e40d111be38b054e4042c150058f0bc64d"
+    },
+    {
+      "id": "OMR-R07",
+      "title": "前面题或同页题没有明细，实际缺扫描页或模板题块",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R07.md",
+      "source": "docs/omr-issues/request-contracts.md#r07",
+      "catalogDocument": "runtime-and-contracts.md#r07",
+      "sha256": "74e294bdaa08311fa561a5c094dbffcc84e4d56fbcb7968050e35b90d84a9b16"
+    },
+    {
+      "id": "OMR-R08",
+      "title": "联调 gRPC 2 秒超时，本地放宽后仍有其他参数故障",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R08.md",
+      "source": "docs/omr-issues/network-and-files.md#r08",
+      "catalogDocument": "runtime-and-contracts.md#r08",
+      "sha256": "7c5f4ca14106af4d4255444c9a45c780595586ec0c5fb7267c43361532d45e31"
+    },
+    {
+      "id": "OMR-R09",
+      "title": "服务发现无可用地址或连接间歇不通，识别未真正到算法",
+      "category": "接口、环境与入参",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-R09.md",
+      "source": "docs/omr-issues/network-and-files.md#r09",
+      "catalogDocument": "runtime-and-contracts.md#r09",
+      "sha256": "f1bfc2b1dfb4e8674a98fa43ee404d477067d663252a2c6f0ef2a62ba2b0ea52"
+    },
+    {
+      "id": "OMR-R10",
+      "title": "作业无点无线补救地址无协议，恢复流程无法调用",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R10.md",
+      "source": "docs/omr-issues/network-and-files.md#r10",
+      "catalogDocument": "runtime-and-contracts.md#r10",
+      "sha256": "c5af89bdff6973d207e48c37ad9344d724a6a020b0bbb1772f23963ecc5a1020"
+    },
+    {
+      "id": "OMR-R11",
+      "title": "业务报告 OOM，已有证据仅为校正失败、超时和内存热点",
+      "category": "接口、环境与入参",
+      "evidenceState": "待补证据",
+      "file": "cases/OMR-R11.md",
+      "source": "docs/omr-issues/process-and-build.md#r11",
+      "catalogDocument": "runtime-and-contracts.md#r11",
+      "sha256": "700d9131584d81844a0b66930f9ba35a5817ac2729ff6941c73b33309d2ef350"
+    },
+    {
+      "id": "OMR-R12",
+      "title": "warnCode 199/998 与 0 不一致，同库内存阈值却不同",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R12.md",
+      "source": "docs/omr-issues/process-and-build.md#r12",
+      "catalogDocument": "runtime-and-contracts.md#r12",
+      "sha256": "31022f99e1a912c8a5c8508750992e7fe1984e85e64c2172f8e7871d28db74b5"
+    },
+    {
+      "id": "OMR-R13",
+      "title": "Maven 把二进制资源当文本过滤，构建失败",
+      "category": "接口、环境与入参",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-R13.md",
+      "source": "docs/omr-issues/process-and-build.md#r13",
+      "catalogDocument": "runtime-and-contracts.md#r13",
+      "sha256": "af76cfe4be7d2593d2f20ba37537d6142949b1136eaa535b6c83866f146b97f5"
+    },
+    {
+      "id": "OMR-R14",
+      "title": "模板路由和接口差异使预期优化未触发",
+      "category": "接口、环境与入参",
+      "evidenceState": "规则已确认，不能直接当作算法缺陷",
+      "file": "cases/OMR-R14.md",
+      "source": "docs/omr-issues/request-contracts.md#r14",
+      "catalogDocument": "runtime-and-contracts.md#r14",
+      "sha256": "88199a57d20239e1b38ef507996f239a63357c03022074e8f28ed24734d93ac7"
+    },
+    {
+      "id": "OMR-T01",
+      "title": "图片切换继承旧位置，缺少模板叠加对照",
+      "category": "取证、构建操作与工具",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-T01.md",
+      "source": "docs/omr-issues/diagnostics-and-tools.md#t01",
+      "catalogDocument": "diagnostics-and-tools.md#t01",
+      "sha256": "b17ca0f7e4fa8aad862e2cb86cb168f890e00c1d9f31851aef1ecc7cea9bd783"
+    },
+    {
+      "id": "OMR-T02",
+      "title": "标注工具无法把倒置背面转正并导出",
+      "category": "取证、构建操作与工具",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-T02.md",
+      "source": "docs/omr-issues/diagnostics-and-tools.md#t02",
+      "catalogDocument": "diagnostics-and-tools.md#t02",
+      "sha256": "acb62d875a0f0f17109963a18b916fb656f643f3af9f972b2c0ada78bc8e866c"
+    },
+    {
+      "id": "OMR-T03",
+      "title": "tar/unzip 把目标目录写成待提取条目，解包报错",
+      "category": "取证、构建操作与工具",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-T03.md",
+      "source": "docs/omr-issues/diagnostics-and-tools.md#t03",
+      "catalogDocument": "diagnostics-and-tools.md#t03",
+      "sha256": "70aa8750f2879f4a4a38f24eccaa7288ea7d4e52de4dc2f53a849e5aedace30d"
+    },
+    {
+      "id": "OMR-T04",
+      "title": "Git push 被公司服务器 hook 拒绝",
+      "category": "取证、构建操作与工具",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-T04.md",
+      "source": "docs/omr-issues/diagnostics-and-tools.md#t04",
+      "catalogDocument": "diagnostics-and-tools.md#t04",
+      "sha256": "657eb79142aba17867a90df84c114e3f10f57a9ccd7ccc1316a83758507aae49"
+    },
+    {
+      "id": "OMR-T05",
+      "title": "云端有引擎埋点，却搜不到完整 Java 请求",
+      "category": "取证、构建操作与工具",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-T05.md",
+      "source": "docs/omr-issues/diagnostics-and-tools.md#t05",
+      "catalogDocument": "diagnostics-and-tools.md#t05",
+      "sha256": "21a3fdb19e1002d37ff1c079f79cf0220e84fd326ad498187ea81d38edff32c4"
+    },
+    {
+      "id": "OMR-R15",
+      "title": "Tomcat 端口停止但旧 JVM 未退出，部署替换导致关闭失败",
+      "category": "接口、环境与入参",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-R15.md",
+      "source": "docs/omr-issues/process-and-build.md#r15",
+      "catalogDocument": "runtime-and-contracts.md#r15",
+      "sha256": "ab039b2051d92e60a2fa43913fec3a1dcf0868c6a1abbc4c71d41b30ef07c5d0"
+    },
+    {
+      "id": "OMR-C07",
+      "title": "底部白带破坏定位点和页码框，两级校正均失败",
+      "category": "校正与页码",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-C07.md",
+      "source": "docs/omr-issues/calibration.md#c07",
+      "catalogDocument": "calibration.md#c07",
+      "sha256": "fcb144520890bf4a90832af8594ff829450219256da14102a55669f21db4024f"
+    },
+    {
+      "id": "OMR-R16",
+      "title": "通用打分条 rect.width 注释冲突，复现参数可能被误改",
+      "category": "接口、环境与入参",
+      "evidenceState": "链路已定位，深层原因或泛化待验证",
+      "file": "cases/OMR-R16.md",
+      "source": "docs/omr-issues/request-contracts.md#r16",
+      "catalogDocument": "runtime-and-contracts.md#r16",
+      "sha256": "710d80fa565c9fda65c2e286fd80098ac77bca8e2dce69a0565633bfff8ca35c"
+    },
+    {
+      "id": "OMR-T06",
+      "title": "参数转换工具只认 gRPC，合法 Java 业务 JSON 被误判",
+      "category": "取证、构建操作与工具",
+      "evidenceState": "原因已验证",
+      "file": "cases/OMR-T06.md",
+      "source": "docs/omr-issues/diagnostics-and-tools.md#t06",
+      "catalogDocument": "diagnostics-and-tools.md#t06",
+      "sha256": "2e072b811a02777eab0c5d64d448819ae98e9ada4a97fdb79b1a53f4d918f764"
+    }
+  ],
+  "schemaVersion": 2,
+  "id": "omr-knowledge",
+  "title": "OMR 案例与基础参考知识资源",
+  "sourceRepository": "srv-pt-scan-recognization",
+  "caseSourceUpdated": "2026-10-10",
+  "caseCategories": {
+    "校正与页码": 7,
+    "客观题识别": 9,
+    "主观评分与打分条": 8,
+    "考号与条码": 4,
+    "接口、环境与入参": 16,
+    "取证、构建操作与工具": 6
+  },
+  "caseEvidenceStates": {
+    "原因已验证": 24,
+    "链路已定位，深层原因或泛化待验证": 21,
+    "待补证据": 3,
+    "规则已确认，不能直接当作算法缺陷": 2
+  },
+  "references": [
+    {
+      "id": "OMR-REF-ENGINE-CODES",
+      "title": "原生引擎历史错误码",
+      "category": "错误码",
+      "evidenceState": "历史文档释义，具体 API/库版本需核验",
+      "file": "references/OMR-REF-ENGINE-CODES.md",
+      "sourceDocuments": [
+        "云文档/OMR-引擎错误码.md#原生引擎码表"
+      ],
+      "sha256": "6486232a596f49fa18bb66afdce255c483db6b15c3894fbd7c463da36b91a2c4"
+    },
+    {
+      "id": "OMR-REF-JAVA-ERROR-TYPE",
+      "title": "Java 引擎客户端 ErrorType",
+      "category": "错误码",
+      "evidenceState": "当前本地源码摘要，现网版本需核验",
+      "file": "references/OMR-REF-JAVA-ERROR-TYPE.md",
+      "sourceDocuments": [
+        "srv-pt-scan-recognization/service/engine-jni/src/main/java/com/iflytek/edu/zx/engine/jni/utils/ErrorType.java"
+      ],
+      "sha256": "5b5b22bb02de1bd885dd859de38018cf2747e8a8e2132f68bd1295346ee4539b"
+    },
+    {
+      "id": "OMR-REF-JAVA-DETAIL-CODES",
+      "title": "Java 业务详细错误码 DetailErrorStatus",
+      "category": "错误码",
+      "evidenceState": "当前本地源码与历史码表对照",
+      "file": "references/OMR-REF-JAVA-DETAIL-CODES.md",
+      "sourceDocuments": [
+        "云文档/OMR-引擎错误码.md#服务错误码",
+        "srv-pt-scan-recognization/web/api-omr-engine/src/main/java/com/iflytek/edu/zx/omr/web/constants/DetailErrorStatus.java"
+      ],
+      "sha256": "16cdc5bf63e8ba20196ea8eeb63ec807e5dd8ea6e4cedee7585931476d342a0b"
+    },
+    {
+      "id": "OMR-REF-GO-STATUS",
+      "title": "Go 选项接口返回状态分层",
+      "category": "错误码",
+      "evidenceState": "当前本地源码摘要，限定 v1/option",
+      "file": "references/OMR-REF-GO-STATUS.md",
+      "sourceDocuments": [
+        "srv-pt-recognization-engine-container/src/iflytek.com/OMRService/common/constant/resp_code_const.go",
+        "srv-pt-recognization-engine-container/src/iflytek.com/OMRService/server/http_handler/option_handler.go"
+      ],
+      "sha256": "bb4727211e4f30b986980252d303e19968129e1d2c13ed28082f9841e3987662"
+    },
+    {
+      "id": "OMR-REF-ARCHITECTURE",
+      "title": "业务职责与服务调用链",
+      "category": "架构",
+      "evidenceState": "历史交接资料结合当前源码校正",
+      "file": "references/OMR-REF-ARCHITECTURE.md",
+      "sourceDocuments": [
+        "云文档/OMR-交接.md",
+        "云文档/OMR-服务.md",
+        "srv-pt-scan-recognization/docs/java-service/scan-workflow.md",
+        "srv-pt-scan-recognization/docs/cross-repository/architecture.md"
+      ],
+      "sha256": "65b1ed7e51e010e132f282473c3beb3b358c9b441a5e6bdaf56eae049c693c81"
+    },
+    {
+      "id": "OMR-REF-TROUBLESHOOTING",
+      "title": "识别问题排查与证据收集",
+      "category": "排查流程",
+      "evidenceState": "历史经验与当前业务分支对照，非固定操作授权",
+      "file": "references/OMR-REF-TROUBLESHOOTING.md",
+      "sourceDocuments": [
+        "云文档/OMR-智批-问题排查.md",
+        "云文档/考号填涂异常专项分析.md",
+        "srv-pt-scan-recognization/docs/omr-issues/README.md"
+      ],
+      "sha256": "c52b6c2ed274e0b67eae31ad8e804fe450215daad1dbce20356fc8a21c0aa7c1"
+    },
+    {
+      "id": "OMR-REF-WITHOUT-POINT",
+      "title": "无点无线校正适用条件与版本边界",
+      "category": "校正与无点无线",
+      "evidenceState": "Java HTTP 接入由源码确认，发布状态未核验",
+      "file": "references/OMR-REF-WITHOUT-POINT.md",
+      "sourceDocuments": [
+        "云文档/20260108-OMR无点无线矫正引擎上线材料.md",
+        "srv-pt-scan-recognization/docs/cross-repository/without-point-http.md",
+        "omr-engine-cv-common/src/correct_point_and_wire_less/engine_api.h"
+      ],
+      "sha256": "43a1f4653b9a84a8c16032f0808716f3b0858a993b0e3bdcf570ce72acfcc314"
+    },
+    {
+      "id": "OMR-REF-DEPENDENCIES",
+      "title": "外部依赖、部署拓扑与环境定位",
+      "category": "依赖与环境",
+      "evidenceState": "历史环境资料与源码职责对照，当前资源状态未核验",
+      "file": "references/OMR-REF-DEPENDENCIES.md",
+      "sourceDocuments": [
+        "云文档/OMR部署.md",
+        "云文档/OMR现网资源维护.md",
+        "云文档/高教接入OMR现网资源维护.md",
+        "srv-pt-scan-recognization/docs/java-service/dependencies-and-logs.md"
+      ],
+      "sha256": "8d0bd97dd07f36694a2e5d6a2a6cbbb18957bb14db05c3fed6f1ffbc413d3746"
+    },
+    {
+      "id": "OMR-REF-ENGINE-ENVIRONMENT",
+      "title": "Go/cgo 环境与引擎包版本匹配",
+      "category": "依赖与环境",
+      "evidenceState": "历史开发手册结合源码校正，未执行构建或替换库",
+      "file": "references/OMR-REF-ENGINE-ENVIRONMENT.md",
+      "sourceDocuments": [
+        "云文档/OMR引擎封装服务环境配置.md",
+        "srv-pt-scan-recognization/docs/cross-repository/build-and-debug.md",
+        "srv-pt-scan-recognization/docs/cross-repository/version-drift.md"
+      ],
+      "sha256": "854f43182dd2ecbeeefe309aa57110730b09de9b13323a31b1e603c18f067fb3"
+    },
+    {
+      "id": "OMR-REF-ADMISSION",
+      "title": "考号与条码异常分类及排查顺序",
+      "category": "考号与条码",
+      "evidenceState": "历史专项的原因分类与验证边界，设计未确认上线",
+      "file": "references/OMR-REF-ADMISSION.md",
+      "sourceDocuments": [
+        "云文档/考号填涂异常专项分析.md",
+        "云文档/OMR-智批-问题排查.md",
+        "srv-pt-scan-recognization/docs/omr-issues/identity.md"
+      ],
+      "sha256": "5e4c6265d31307cdf4bbcede97d71d3be7cc53f87f1141187cb6eef30f3bbb1b"
+    }
+  ],
+  "caseCount": 50,
+  "referenceCount": 10,
+  "referenceCategories": {
+    "错误码": 4,
+    "架构": 1,
+    "排查流程": 1,
+    "校正与无点无线": 1,
+    "依赖与环境": 2,
+    "考号与条码": 1
+  },
+  "sourceCoverage": "SOURCE-COVERAGE.md"
+}

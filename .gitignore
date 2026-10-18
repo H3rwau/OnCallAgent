@@ -1,3 +1,6 @@
+### macOS metadata ###
+.DS_Store
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -62,3 +65,9 @@ replay_pid*
 
 # Milvus local persistent data
 /volumes/
+
+# Local MCP binaries and Python bytecode
+/.tools/
+/.run/
+/uploads/
+__pycache__/

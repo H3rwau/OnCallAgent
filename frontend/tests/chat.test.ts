@@ -31,6 +31,9 @@ test('sends the exact backend field names and preserves the conversation ID acro
 
 test('reports proxy failures and invalid JSON', async () => {
   await assert.rejects(requestChat('a', 'q', {
+    fetcher: (async () => new Response('Internal Server Error', { status: 500 })) as typeof fetch,
+  }), /服务发生内部错误（HTTP 500）/)
+  await assert.rejects(requestChat('a', 'q', {
     fetcher: (async () => new Response('Bad Gateway', { status: 502 })) as typeof fetch,
   }), /后端已启动/)
   await assert.rejects(requestChat('a', 'q', {
