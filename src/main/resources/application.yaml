@@ -55,6 +55,7 @@ dashscope:
 file:
   upload:
     path: ${FILE_UPLOAD_PATH:./uploads}  # 默认为项目根目录下的 uploads 文件夹
+    allowed-extensions: txt,md
 
 # Milvus 向量数据库配置
 milvus:
